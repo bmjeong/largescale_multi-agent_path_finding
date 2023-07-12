@@ -3,8 +3,8 @@ import numpy.linalg as LA
 from matplotlib import pyplot as plt
 from matplotlib import animation
 
-nx = 100
-ny = 100
+nx = 150
+ny = 150
 
 class car:
     def __init__(self):
@@ -17,7 +17,7 @@ class car:
         self.x = 0
         self.y = 0
         self.sz = 0.5
-        self.dt = 2
+        self.dt = 10
         self.v = 0
 
     def draw_init(self, ax, center, psi):
@@ -106,7 +106,7 @@ class car:
 class rvo_:
     def __init__(self):
         self.fig = plt.figure()
-        plt.axis()
+        plt.axis([-nx, nx, -ny, ny])
         self.ax = plt.gca()
         self.ax.set_aspect(1)
         self.alpha = 0
@@ -118,12 +118,19 @@ class rvo_:
         self.sz = 0.5
 
         self.cc = []
-        for i in range(10):
+        self.pos = []
+        self.psi = []
+        self.goal = []
+        r = 100
+        for i in range(50):
             self.cc.append(car())
+            self.pos.append([r * np.cos(i/100 * np.pi * 2), r * np.sin(i/100 * np.pi * 2)])
+            self.psi.append(i/100 * np.pi * 2)
+            self.goal.append([r * np.cos(i/100 * np.pi * 2 + np.pi), r * np.sin(i/100 * np.pi * 2 + np.pi)])
 
-        self.pos = [[0,0], [20, 0], [40, 0], [60, 0], [80, 0], [0,20], [20, 20], [40, 20], [60, 20], [80, 20]]
-        self.goal = [[80,20], [60, 20], [40, 20], [20, 20], [0, 20], [80,0], [60, 0], [40, 0], [20, 0], [0, 0]]
-        self.psi = [0, 0, 0, 0, 0, np.pi, np.pi, np.pi, np.pi, np.pi]
+        # self.pos = [[0,0], [20, 0], [40, 0], [60, 0], [80, 0], [0,20], [20, 20], [40, 20], [60, 20], [80, 20]]
+        # self.goal = [[80,20], [60, 20], [40, 20], [20, 20], [0, 20], [80,0], [60, 0], [40, 0], [20, 0], [0, 0]]
+        # self.psi = [0, 0, 0, 0, 0, np.pi, np.pi, np.pi, np.pi, np.pi]
         self.line = []
         for i in range(len(self.cc)):
             tp = self.cc[i].draw_init(self.ax, self.pos[i], self.psi[i])
